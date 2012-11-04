@@ -1,7 +1,7 @@
 import Image, ImageFont, ImageDraw, ImageEnhance, os
 
 def test():
-    batch("./in", "./out/", "./template/default/header.png", "./template/default/footer.png")
+    batch("./in", "./out/", "./templates/default/header.png", "./templates/default/footer.png")
 
 def scale((width,height),(max_width,max_height)):
   new_width = max_width
@@ -21,7 +21,7 @@ def draw_canvas(base_image_path, header_path, footer_path, output_dir):
     header_size = (canvas_size[0],int(0.3*DPI))
     footer_size = (canvas_size[0],int(1.7*DPI))
     content_size = (canvas_size[0],int(6.5*DPI))
-    canvas = Image.new('RGBA', canvas_size, (255,255,255,0))
+    canvas = Image.new('RGBA', canvas_size, (255,255,255))
     
     header = Image.open(header_path)
     if header.mode != 'RGBA':
@@ -34,41 +34,28 @@ def draw_canvas(base_image_path, header_path, footer_path, output_dir):
       footer = footer.convert('RGBA')
     footer = footer.resize(scale(footer.size,footer_size))
     canvas.paste(footer,(int((canvas.size[0]-footer.size[0])/2),canvas.size[1]-footer.size[1]))
-    
-#     font = ImageFont.truetype('/Library/Fonts/Hoefler Text.ttc',100)
-#     txt_draw = ImageDraw.Draw(footer)
-#     txt_draw.text((10,10),'ccccccccc',fill=(255,0,0,0), font=font)
-    
-
 
     base_image = Image.open(base_image_path)
     if base_image.mode != 'RGBA':
       base_image = base_image.convert('RGBA')
-    base_image = base_image.resize(scale(base_image.size,content_size))
+    base_image = base_image.resize(scale(base_image.size,content_size))    
     canvas.paste(base_image,(int((canvas.size[0]-base_image.size[0])/2),header.size[1]+1))
-        
-#     txtimg = Image.new('RGBA',(150,50),(0,0,0,0))
-#     txtimg_drawer = ImageDraw.Draw(txtimg)
-#     txtimg_drawer.text((5,20),'aaaaa')
-#     canvas.paste(txtimg,(10,10))
 
-#     font = ImageFont.load("arial.pil")
-#     image = Image.new("RGBA", (288,432), (255,255,255))
-#     usr_font = ImageFont.truetype("resources/HelveticaNeueLight.ttf", 25)
-#     d_usr = ImageDraw.Draw(image)
-#     d_usr = d_usr.text((105,280), "Travis L.",(0,0,0), font=usr_font)
-    
-    
-
-    #Image.composite(canvas, base_image, canvas).save(os.path.join(output_dir, os.path.basename(base_image_path)))
     canvas.save(os.path.join(output_dir, os.path.basename(base_image_path)))
+
   except Exception, (msg):
     print msg
 
-def batch(infolder, outfolder, header_path, footer_path):
-    for root, dirs, files in os.walk(infolder):
+def batch(input_path, output_path, header_path, footer_path):
+    for root, dirs, files in os.walk(input_path):
         for name in files:
-          draw_canvas(os.path.join(root, name), header_path, footer_path, outfolder)
+          draw_canvas(os.path.join(root, name), header_path, footer_path, output_path)
 
 if __name__ == '__main__':
     test()
+    
+#     font = ImageFont.truetype('/Library/Fonts/Hoefler Text.ttc',100)
+#     txt_draw = ImageDraw.Draw(footer)
+#     txt_draw.text((10,10),'ccccccccc',fill=(255,0,0,0), font=font)
+
+#     Image.composite(canvas, base_image, canvas).save(os.path.join(output_dir, os.path.basename(base_image_path)))
