@@ -1,2 +1,0 @@
-text_entry:menu_label:x:y
-label:text:x:y
