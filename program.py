@@ -44,10 +44,7 @@ def draw_canvas(base_image_path, header_path, footer_path, canvas):
 def draw_text(text_path,canvas):
   txt_draw = ImageDraw.Draw(canvas)
   file = open(text_path, 'rb')
-  while(1):
-    line = file.readline()
-    if not line:
-      break
+  for line in file.readlines():
     fields = line.rstrip().split('|||')
     txt_draw.text((int(fields[1]),int(fields[2])),fields[0],fill=(0,0,0), font=font)  
   file.close()
